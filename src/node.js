@@ -36,6 +36,7 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.userAgent');
 goog.require('wgxpath.IEAttrWrapper');
 goog.require('wgxpath.userAgent');
+goog.require('wgxpath.NameTest');
 
 
 /** @typedef {!(Node|wgxpath.IEAttrWrapper)} */
@@ -266,7 +267,14 @@ wgxpath.Node.getDescendantNodesGeneric_ = function(test, node,
     wgxpath.Node.doRecursiveAttrMatch_(test, node, attrName,
         attrValue, nodeset);
   } else if (node.getElementsByTagName) {
-    var nodes = node.getElementsByTagName(test.getName());
+    var ns = test.getOriginalNamespaceUri();
+    var nodes;
+    if(ns == null || ns === wgxpath.NameTest.HTML_NAMESPACE_URI_) {
+      nodes = node.getElementsByTagName(test.getName());
+    } else {
+      nodes = node.getElementsByTagNameNS(ns, test.getName());
+    }
+
     goog.array.forEach(nodes, function(node) {
       if (wgxpath.Node.attrMatches(node, attrName, attrValue)) {
         nodeset.add(node);

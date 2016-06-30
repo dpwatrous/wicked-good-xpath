@@ -62,6 +62,11 @@ wgxpath.NameTest = function(name, opt_namespaceUri) {
     // Defined names default to html namespace.
     defaultNamespace = wgxpath.NameTest.HTML_NAMESPACE_URI_;
   }
+  
+  // KLUDGE: Non lower-cased version for use with standard getElementsByTagNameNS
+  this.originalNamespaceUri_ = opt_namespaceUri ? opt_namespaceUri :
+      defaultNamespace;
+  
   /**
    * @type {string}
    * @private
@@ -77,7 +82,7 @@ wgxpath.NameTest = function(name, opt_namespaceUri) {
  *
  * @const
  * @type {string}
- * @private
+ * @public
  */
 wgxpath.NameTest.HTML_NAMESPACE_URI_ = 'http://www.w3.org/1999/xhtml';
 
@@ -132,6 +137,16 @@ wgxpath.NameTest.prototype.getName = function() {
  */
 wgxpath.NameTest.prototype.getNamespaceUri = function() {
   return this.namespaceUri_;
+};
+
+
+/**
+ * Returns the non lower-cased namespace URI to be matched.
+ *
+ * @return {string} Namespace URI.
+ */
+wgxpath.NameTest.prototype.getOriginalNamespaceUri = function() {
+  return this.originalNamespaceUri_;
 };
 
 
